@@ -3,8 +3,9 @@ module MonoidBasics where
 open import Relation.Binary.PropositionalEquality
 open import Data.Nat hiding (_^_)
 open import Data.Bool
--- ≡
--- ∀
+open import Relation.Binary.PropositionalEquality
+open ≡-Reasoning
+
 
 record Monoid : Set₁  where
     field
@@ -48,7 +49,15 @@ module Properties (M : Monoid) where
     expo-law-one : (x y : ℕ)(n : type) -> n ^ (x + y) ≡ n ^ x ⊕ n ^ y
     expo-law-one 0 0 n = idR-reverse ε
     expo-law-one 0 y n = idR-reverse (n ^ y)
-    expo-law-one (suc x) y n = {!   !}
+    -- need to show `n ⊕ n ^ (x + y) ≡ n ⊕ n ^ x ⊕ n ^ y` in the below
+    expo-law-one (suc x) y n = 
+      begin
+        (n ⊕ n ^ (x + y))
+          ≡⟨ cong (λ u -> n ⊕ u) (expo-law-one x y n) ⟩
+        (n ⊕ (n ^ x ⊕ n ^ y))
+          ≡⟨ sym (assoc (n) (n ^ x) (n ^ y)) ⟩
+        (n ⊕ n ^ x ⊕ n ^ y)
+      ∎
 
     -- cong (λ u -> n ⊕ u)  (expo-law-one (x y) (n))
 
