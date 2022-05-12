@@ -59,6 +59,6 @@ module Properties (M : Monoid) where
         (n ⊕ n ^ x ⊕ n ^ y)
       ∎
 
-    -- cong (λ u -> n ⊕ u)  (expo-law-one (x y) (n))
-
+    expo-law-two : (x y : ℕ)(n : type) -> n ^ (x * y) ≡ ((n ^ y) ^ x)
+    expo-law-two x y n = {!   !}
     
