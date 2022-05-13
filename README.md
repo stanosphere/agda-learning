@@ -11,5 +11,6 @@ But these are the ones I've found most useful so far
 | C-c C-l   | Load file                |
 | C-c C-SPC | Give (fill goal)         |
 | C-c C-c	  | Case split               |
+| C-c C-r	  | Refine                   |
 | \G*   	  | Greek letter             |
 | \b*   	  | Blackboard font (e.g. ℕ) |
