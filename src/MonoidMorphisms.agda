@@ -4,6 +4,7 @@ open import MonoidBasics
 open Monoid
 open import Relation.Binary.PropositionalEquality
 open import Agda.Builtin.Unit
+open import Data.Product hiding (map)
 
 -- structure preserving map, i.e. f(x) . f(y) === f(x . y)
 -- identity maps to identity f(e1) == e2
@@ -58,7 +59,19 @@ combineMorphism {m} {n} {o} f g = record
 -- p ≡ q
 
 product : Monoid -> Monoid -> Monoid
-product M N = {!   !}
+product M N = record
+  { type =  (type M) × (type N)
+  ; ε =  ε M , ε N 
+  ; _⊕_ =  λ (m1 , n1) (m2 , n2) -> (m1 ⊕m m2) , (n1 ⊕n n2) 
+  ; idL =  λ (m , n) -> {!  !} 
+  ; idR =  λ (m , n) -> {!  !} 
+  ; assoc =  λ a b c -> {!   !} 
+  }
+    where 
+      open Monoid M renaming (ε to εM ; _⊕_ to _⊕m_ ; type to typeM)
+      open Monoid N renaming (ε to εN ; _⊕_ to _⊕n_ ; type to typeN)
+      -- idL-product-lemma : (a : type) ->  a ⊕ ε ≡ a
+      -- idL-product-lemma = ?
 
 -- unit monoid containing a single element
 terminalMonoid : Monoid 
