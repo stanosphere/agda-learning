@@ -3,6 +3,7 @@ module MonoidMorphisms where
 open import MonoidBasics
 open Monoid
 open import Relation.Binary.PropositionalEquality
+open import Agda.Builtin.Unit
 
 -- structure preserving map, i.e. f(x) . f(y) === f(x . y)
 -- identity maps to identity f(e1) == e2
@@ -61,12 +62,22 @@ product M N = {!   !}
 
 -- unit monoid containing a single element
 terminalMonoid : Monoid 
-terminalMonoid = {!   !}
+terminalMonoid = record
+  { type = ⊤ 
+  ; ε =  tt
+  ; _⊕_ = λ a b -> tt 
+  ; idL = λ a -> refl 
+  ; idR = λ a -> refl 
+  ; assoc = λ a b c -> refl 
+  }
 
 -- for any monoid we can always produce a morphism that takes it to the terminalMonoid
 morphismToTerminal : (m : Monoid) -> MonoidMorphism m terminalMonoid
-morphismToTerminal m = {!   !}
+morphismToTerminal m = record 
+  { map = λ a -> tt
+  ; idPreserve = refl 
+  ; combPreserve = refl 
+  }
 
 -- 4 -> 2
 -- {1, -1, i, -i} squared -> {1, -1}
-
