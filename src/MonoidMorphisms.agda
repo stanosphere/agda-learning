@@ -63,7 +63,8 @@ product : Monoid -> Monoid -> Monoid
 product M N = record
   { type  =  (type M) × (type N)
   ; ε     = ε M , ε N 
-  ; _⊕_   = _|+|_
+  ; _⊕_   = λ (m1 , n1) (m2 , n2) -> (m1 ⊕m m2) , (n1 ⊕n n2) 
+  
   ; idL   = idL-product-lemma 
   ; idR   =  idR-product-lemma
   ; assoc = assoc-product-lemma
