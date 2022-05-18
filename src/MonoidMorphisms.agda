@@ -5,6 +5,7 @@ open Monoid
 open import Relation.Binary.PropositionalEquality
 open import Agda.Builtin.Unit
 open import Data.Product hiding (map)
+open import Data.Bool
 
 -- structure preserving map, i.e. f(x) . f(y) === f(x . y)
 -- identity maps to identity f(e1) == e2
@@ -60,19 +61,25 @@ combineMorphism {m} {n} {o} f g = record
 
 product : Monoid -> Monoid -> Monoid
 product M N = record
-  { type =  (type M) × (type N)
-  ; ε =  ε M , ε N 
-  ; _⊕_ =  λ (m1 , n1) (m2 , n2) -> (m1 ⊕m m2) , (n1 ⊕n n2) 
-  ; idL =  λ (m , n) -> {!  !} 
-  ; idR =  λ (m , n) -> {!  !} 
-  ; assoc =  λ a b c -> {!   !} 
+  { type  =  (type M) × (type N)
+  ; ε     = ε M , ε N 
+  ; _⊕_   = _|+|_
+  ; idL   = idL-product-lemma 
+  ; idR   =  idR-product-lemma
+  ; assoc = assoc-product-lemma
   }
     where 
       open Monoid M renaming (ε to εM ; _⊕_ to _⊕m_ ; type to typeM)
       open Monoid N renaming (ε to εN ; _⊕_ to _⊕n_ ; type to typeN)
-      -- idL-product-lemma : (a : type) ->  a ⊕ ε ≡ a
-      -- idL-product-lemma = ?
-
+      _|+|_ : (type M) × (type N) -> (type M) × (type N) -> (type M) × (type N)
+      _|+|_ (m1 , n1) (m2 , n2) = (m1 ⊕m m2) , (n1 ⊕n n2)
+      idL-product-lemma : (x : (type M) × (type N)) ->  x |+| (ε M , ε N) ≡ x 
+      idL-product-lemma (m , n) = {!   !}
+      idR-product-lemma : (x : (type M) × (type N)) -> (ε M , ε N) |+| x ≡ x 
+      idR-product-lemma (m , n) = {!   !}
+      assoc-product-lemma : (x y z : (type M) × (type N)) -> (x |+| y) |+| z ≡ x |+| (y |+| z)
+      assoc-product-lemma (mx , nx) (my , ny) (mz , nz) = {!   !}
+      
 -- unit monoid containing a single element
 terminalMonoid : Monoid 
 terminalMonoid = record
