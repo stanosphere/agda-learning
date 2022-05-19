@@ -61,6 +61,8 @@ module ProductMonoid (𝓜 𝓝 : Monoid) where
         ≡⟨ cong (λ u -> (m₁ ⊙ (m₂ ⊙ m₃) , u)) (assoc-𝓝 n₁ n₂ n₃) ⟩  
       m₁ ⊙ (m₂ ⊙ m₃) , n₁ ⊗ ( n₂ ⊗ n₃)
         ≡⟨ refl ⟩ 
+      (m₁ , n₁) ⨂ (m₂ ⊙ m₃ , n₂ ⊗ n₃)  
+        ≡⟨ refl ⟩ 
       (m₁ , n₁) ⨂ ((m₂ , n₂) ⨂ (m₃ , n₃)) 
     ∎ 
 
