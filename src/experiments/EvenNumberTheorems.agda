@@ -69,11 +69,14 @@ even-mult : ∀ {n} -> Even n -> (m : ℕ) -> Even (n * m)
 even-mult zEven y = zEven
 even-mult (sEven x) y = {!   !}
 
+mult-identity-lemma : { n : ℕ } -> n ≡ n * 1
+mult-identity-lemma { zero }  = refl
+mult-identity-lemma { suc x } = cong suc (mult-identity-lemma {x})
+
 power-of-even : ∀ {n k} -> Even n -> GreaterThanOne k -> Even (n ^ k)
-power-of-even x one = subst Even {!   !} x
-power-of-even x (sGT1 y) = {!   !}
-  where
-    mult-identity-lemma : { n : ℕ } -> n ≡ n * 1
-    mult-identity-lemma { zero } = refl
-    mult-identity-lemma { suc x } = cong suc (mult-identity-lemma {x})
- 
+power-of-even x one = subst Even mult-identity-lemma x
+power-of-even x (sGT1 y) = 
+  let 
+    x^y     = power-of-even x y
+    x*(x^y) = product-of-evens x x^y
+  in x*(x^y)
