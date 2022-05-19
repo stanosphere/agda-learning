@@ -80,3 +80,7 @@ power-of-even x (sGT1 y) =
     x^y     = power-of-even x y
     x*(x^y) = product-of-evens x x^y
   in x*(x^y)
+  -- Even (n ^ (k + 1)) is the result we need but agda can infer an intermediary result for us from the definition of ^
+  --   _^_ : ℕ → ℕ → ℕ
+  --   x ^ zero  = 1
+  --   x ^ suc n = x * x ^ n
