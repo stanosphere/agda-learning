@@ -70,5 +70,10 @@ even-mult zEven y = zEven
 even-mult (sEven x) y = {!   !}
 
 power-of-even : ∀ {n k} -> Even n -> GreaterThanOne k -> Even (n ^ k)
-power-of-even x one = {!   !}
+power-of-even x one = subst Even {!   !} x
 power-of-even x (sGT1 y) = {!   !}
+  where
+    mult-identity-lemma : { n : ℕ } -> n ≡ n * 1
+    mult-identity-lemma { zero } = refl
+    mult-identity-lemma { suc x } = cong suc (mult-identity-lemma {x})
+ 
