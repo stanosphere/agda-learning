@@ -1,6 +1,7 @@
 module EvenNumberTheorems where
   
 open import Data.Nat
+open import Data.Nat.Properties
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 -- https://stackoverflow.com/questions/42357572/agda-product-of-even-numbers-is-even
@@ -67,8 +68,14 @@ add-two-numbers (suc x) =
 
 even-mult : ∀ {n} -> Even n -> (m : ℕ) -> Even (n * m)
 even-mult zEven y = zEven
-even-mult (sEven x) y = {!   !}
-
+even-mult {suc (suc n)} (sEven x) y =
+  let 
+    q = even-mult x y
+    p = add-two-numbers y
+    r = sum-of-evens p q
+    res = subst Even (+-assoc y y (n * y) ) r
+  in res
+ 
 mult-identity-lemma : { n : ℕ } -> n ≡ n * 1
 mult-identity-lemma { zero }  = refl
 mult-identity-lemma { suc x } = cong suc (mult-identity-lemma {x})
