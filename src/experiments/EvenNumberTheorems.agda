@@ -10,14 +10,16 @@ data Even : ℕ -> Set where
   zEven : Even 0
   sEven : {n : ℕ} -> Even n -> Even (suc (suc n))
 
-data GreaterThanOne : ℕ -> Set where
-  one : GreaterThanOne 1
-  sGT1 : {n : ℕ} -> GreaterThanOne n -> GreaterThanOne (suc n)
+data GreaterThanZero : ℕ -> Set where
+  one : GreaterThanZero 1
+  sGT1 : {n : ℕ} -> GreaterThanZero n -> GreaterThanZero (suc n)
 
+-- summing a pair of even numbers always gives an even number
 sum-of-evens : ∀ {n m} -> Even n -> Even m -> Even (n + m)
 sum-of-evens zEven     y = y
 sum-of-evens (sEven x) y = sEven (sum-of-evens x y)
 
+-- multiplying a pair of even numbers always gives an even number
 product-of-evens : ∀ {n m : ℕ} -> Even n -> Even m -> Even (n * m)
 product-of-evens zEven y     = zEven
 product-of-evens (sEven x) y =
@@ -30,13 +32,15 @@ product-of-evens (sEven x) y =
     c =   sum-of-evens y b
   in c
 
+-- squaring an even numbers always gives an even number (special case of product rule really)
 square-of-even : ∀ {n} -> Even n -> Even (n * n)
 square-of-even x = product-of-evens x x
 
--- pen and paper proof uses contradiction
+-- pen and paper proof uses contradiction!!!
 square-of-even-converse : ∀ {n} -> Even (n * n) -> Even n
 square-of-even-converse x_squared = {!   !}
 
+-- basically just proving that multiplying a number by two always gives you an even number
 add-two-numbers : (n : ℕ) -> Even (n + n)
 add-two-numbers zero = zEven
 add-two-numbers (suc x) = 
@@ -66,21 +70,23 @@ add-two-numbers (suc x) =
     lemma-suc-2 : (p : ℕ) -> suc (suc (p + p)) ≡ (suc p) + (suc p)
     lemma-suc-2 p = sym (lemma-suc-shuffle-2 p p)
 
+-- multiplying an even number by any natural number always gives an even number
 even-mult : ∀ {n} -> Even n -> (m : ℕ) -> Even (n * m)
 even-mult zEven y = zEven
-even-mult {suc (suc n)} (sEven x) y =
+even-mult {suc (suc n)} (sEven x) y = -- type is suc (suc n) and value us sEven x
   let 
-    q = even-mult x y
-    p = add-two-numbers y
-    r = sum-of-evens p q
-    res = subst Even (+-assoc y y (n * y) ) r
-  in res
+    x*y     = even-mult x y
+    y+y     = add-two-numbers y
+    y+y+x*y = sum-of-evens y+y x*y
+  in subst Even (+-assoc y y (n * y) ) y+y+x*y
  
+-- probably in the standard library but no harm in proving it here too!
 mult-identity-lemma : { n : ℕ } -> n ≡ n * 1
 mult-identity-lemma { zero }  = refl
 mult-identity-lemma { suc x } = cong suc (mult-identity-lemma {x})
 
-power-of-even : ∀ {n k} -> Even n -> GreaterThanOne k -> Even (n ^ k)
+-- raising an even number to the power of any natural number greater than one is always even
+power-of-even : ∀ {n k} -> Even n -> GreaterThanZero k -> Even (n ^ k)
 power-of-even x one = subst Even mult-identity-lemma x
 power-of-even x (sGT1 y) = 
   let 
