@@ -54,51 +54,31 @@ combineMorphism {m} {n} {o} f g = record
       open MonoidMorphism f renaming (map to mapF ; idPreserve to idPreserveF ; combPreserve to combPreserveF)
       open MonoidMorphism g renaming (map to mapG ; idPreserve to idPreserveG ; combPreserve to combPreserveG)
 
--- given a pair of proofs that a pair of values are equal agda can show that the proof must be equal
--- (x y : A)
--- (p q : x ≡ y)
--- p ≡ q
-
-product : Monoid -> Monoid -> Monoid
-product M N = record
-  { type  =  (type M) × (type N)
-  ; ε     = ε M , ε N 
-  ; _⊕_   = λ (m1 , n1) (m2 , n2) -> (m1 ⊕m m2) , (n1 ⊕n n2) 
-  
-  ; idL   = idL-product-lemma 
-  ; idR   =  idR-product-lemma
-  ; assoc = assoc-product-lemma
-  }
-    where 
-      open Monoid M renaming (ε to εM ; _⊕_ to _⊕m_ ; type to typeM)
-      open Monoid N renaming (ε to εN ; _⊕_ to _⊕n_ ; type to typeN)
-      _|+|_ : (type M) × (type N) -> (type M) × (type N) -> (type M) × (type N)
-      _|+|_ (m1 , n1) (m2 , n2) = (m1 ⊕m m2) , (n1 ⊕n n2)
-      idL-product-lemma : (x : (type M) × (type N)) ->  x |+| (ε M , ε N) ≡ x 
-      idL-product-lemma (m , n) = {!   !}
-      idR-product-lemma : (x : (type M) × (type N)) -> (ε M , ε N) |+| x ≡ x 
-      idR-product-lemma (m , n) = {!   !}
-      assoc-product-lemma : (x y z : (type M) × (type N)) -> (x |+| y) |+| z ≡ x |+| (y |+| z)
-      assoc-product-lemma (mx , nx) (my , ny) (mz , nz) = {!   !}
-      
 -- unit monoid containing a single element
 terminalMonoid : Monoid 
 terminalMonoid = record
-  { type = ⊤ 
-  ; ε =  tt
-  ; _⊕_ = λ a b -> tt 
-  ; idL = λ a -> refl 
-  ; idR = λ a -> refl 
+  { type  = ⊤ 
+  ; ε     = tt
+  ; _⊕_   = λ a b -> tt 
+  ; idL   = λ a -> refl 
+  ; idR   = λ a -> refl 
   ; assoc = λ a b c -> refl 
   }
 
 -- for any monoid we can always produce a morphism that takes it to the terminalMonoid
 morphismToTerminal : (m : Monoid) -> MonoidMorphism m terminalMonoid
 morphismToTerminal m = record 
-  { map = λ a -> tt
-  ; idPreserve = refl 
+  { map          = λ a -> tt
+  ; idPreserve   = refl 
   ; combPreserve = refl 
   }
 
+-- potentially interesting morphism to try to encode
 -- 4 -> 2
 -- {1, -1, i, -i} squared -> {1, -1}
+
+-- random agda fact
+-- given a pair of proofs that a pair of values are equal agda can show that the proof must be equal
+-- (x y : A)
+-- (p q : x ≡ y)
+-- p ≡ q

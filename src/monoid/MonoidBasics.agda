@@ -7,7 +7,6 @@ open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 open import Data.Nat.Properties
 
-
 record Monoid : Set₁  where
     field
         type : Set
