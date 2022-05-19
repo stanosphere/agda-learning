@@ -17,23 +17,17 @@ sum-of-evens : ∀ {n m} -> Even n -> Even m -> Even (n + m)
 sum-of-evens zEven     y = y
 sum-of-evens (sEven x) y = sEven (sum-of-evens x y)
 
-product-of-evens : ∀ {n m} -> Even n -> Even m -> Even (n * m)
+product-of-evens : ∀ {n m : ℕ} -> Even n -> Even m -> Even (n * m)
 product-of-evens zEven y     = zEven
-product-of-evens (sEven x) y = sum-of-evens y (sum-of-evens y (product-of-evens x y))
--- In the above I have
--- x : Even n
--- y : Even m
--- And need to show
--- Even (m + (m + n * m))
-
--- Whilst the above implementation is obviously correct it's perhaps not massively readable
--- I would like to do something like
---   val a = product-of-evens x y
---   val b = sum-of-evens y a
---   val c = sum-of-evens y b
---   return c
-
--- is there a syntax for the above???
+product-of-evens (sEven x) y =
+  let
+    -- a : Even (n * m)
+    a = product-of-evens x y
+    -- b : Even (m + n * m)
+    b = sum-of-evens y a
+    -- c : Even (m + (m + n * m))
+    c =   sum-of-evens y b
+  in c
 
 square-of-even : ∀ {n} -> Even n -> Even (n * n)
 square-of-even x = product-of-evens x x
@@ -44,7 +38,32 @@ square-of-even-converse x_squared = {!   !}
 
 add-two-numbers : (n : ℕ) -> Even (n + n)
 add-two-numbers zero = zEven
-add-two-numbers (suc x) = {!   !} 
+add-two-numbers (suc x) = 
+  let
+    a : Even (suc (suc (x + x)))
+    a = sEven (add-two-numbers x)
+
+    b : suc (suc (x + x)) ≡ suc x + suc x
+    b = lemma-suc-2 x
+    
+    res : Even (suc x + suc x)
+    res = subst Even b a
+  in res
+  where 
+    lemma-suc-shuffle : (p q : ℕ) -> p + suc q ≡ suc (p + q)
+    lemma-suc-shuffle zero q = refl
+    lemma-suc-shuffle (suc p) q = cong suc (lemma-suc-shuffle p q)
+    lemma-suc-shuffle-2 : (p q : ℕ) -> (suc p) + (suc q) ≡ suc (suc (p + q))
+    lemma-suc-shuffle-2 p q = 
+      begin 
+        (suc p) + (suc q)
+          ≡⟨ refl ⟩ 
+        suc (p + suc q)
+          ≡⟨ cong suc (lemma-suc-shuffle p q) ⟩ 
+        suc (suc (p + q)) 
+      ∎ 
+    lemma-suc-2 : (p : ℕ) -> suc (suc (p + p)) ≡ (suc p) + (suc p)
+    lemma-suc-2 p = sym (lemma-suc-shuffle-2 p p)
 
 even-mult : ∀ {n} -> Even n -> (m : ℕ) -> Even (n * m)
 even-mult zEven y = zEven
@@ -53,4 +72,3 @@ even-mult (sEven x) y = {!   !}
 power-of-even : ∀ {n k} -> Even n -> GreaterThanOne k -> Even (n ^ k)
 power-of-even x one = {!   !}
 power-of-even x (sGT1 y) = {!   !}
-
