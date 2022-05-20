@@ -40,11 +40,9 @@ combineMorphism {m} {n} {o} f g = record
     ∎ 
   ; combPreserve = 
     λ {a} {b} -> begin 
-      mapG (mapF (a ⊕m b)) 
-        ≡⟨ cong mapG combPreserveF ⟩ 
-      mapG (mapF a ⊕n mapF b) 
-        ≡⟨ combPreserveG ⟩ 
-      (mapG (mapF a) ⊕o mapG (mapF b)) 
+      mapG (mapF (a ⊕m b)) ≡⟨ cong mapG combPreserveF ⟩ 
+      mapG (mapF a ⊕n mapF b) ≡⟨ combPreserveG ⟩ 
+      mapG (mapF a) ⊕o mapG (mapF b)
     ∎ 
   }
     where 
@@ -82,3 +80,15 @@ morphismToTerminal m = record
 -- (x y : A)
 -- (p q : x ≡ y)
 -- p ≡ q
+
+module MonoidMorphismInstances where
+  ∧-to-∨-monoid-morphism : MonoidMorphism bool-monoid-∧ bool-monoid-∨
+  ∧-to-∨-monoid-morphism = record 
+    { map = not 
+    ; idPreserve = refl 
+    ; combPreserve = λ {a b} -> comb-preserve-lemma a b
+    }
+      where
+        comb-preserve-lemma : ( a b : Bool ) -> not(a ∧ b) ≡ (not a) ∨ (not b)
+        comb-preserve-lemma = {!   !}
+  
