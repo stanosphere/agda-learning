@@ -84,11 +84,24 @@ morphismToTerminal m = record
 module MonoidMorphismInstances where
   ∧-to-∨-monoid-morphism : MonoidMorphism bool-monoid-∧ bool-monoid-∨
   ∧-to-∨-monoid-morphism = record 
-    { map = not 
-    ; idPreserve = refl 
+    { map          = not 
+    ; idPreserve   = refl 
     ; combPreserve = λ {a b} -> comb-preserve-lemma a b
     }
       where
-        comb-preserve-lemma : ( a b : Bool ) -> not(a ∧ b) ≡ (not a) ∨ (not b)
-        comb-preserve-lemma = {!   !}
+        comb-preserve-lemma : (a b : Bool) -> not(a ∧ b) ≡ (not a) ∨ (not b)
+        comb-preserve-lemma false y = refl
+        comb-preserve-lemma true y  = refl
+
+  ∨-to-∧-monoid-morphism : MonoidMorphism bool-monoid-∨ bool-monoid-∧
+  ∨-to-∧-monoid-morphism = record 
+    { map          = not 
+    ; idPreserve   = refl 
+    ; combPreserve = λ {a b} -> comb-preserve-lemma a b
+    }
+      where
+        comb-preserve-lemma : (a b : Bool) -> not (a ∨ b) ≡ not a ∧ not b
+        comb-preserve-lemma false y = refl
+        comb-preserve-lemma true y  = refl
+  
   
