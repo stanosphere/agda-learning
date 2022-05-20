@@ -50,20 +50,13 @@ intMonoid = record
         -- since I use refl in the below except for one step this can be written as simply
         -- int-assoc-lemma (suc a) b c = cong suc (int-assoc-lemma a b c)
         -- but I think for now it's nice to show the intermediaries, makes it easier for a human to follow
-        int-assoc-lemma (suc a) b c = 
-          begin
-            ((suc a) + b) + c
-              ≡⟨ refl ⟩
-            suc (a + b) + c
-              ≡⟨ refl ⟩
-            suc (a + b + c)
-              ≡⟨ refl ⟩
-            suc ((a + b) + c)
-              ≡⟨ cong suc (int-assoc-lemma a b c) ⟩
-            suc (a + (b + c))
-              ≡⟨ refl ⟩
-            (suc a) + (b + c)
-          ∎
+        int-assoc-lemma (suc a) b c = begin
+          ((suc a) + b) + c ≡⟨ refl ⟩
+          suc (a + b) + c   ≡⟨ refl ⟩
+          suc (a + b + c)   ≡⟨ refl ⟩
+          suc ((a + b) + c) ≡⟨ cong suc (int-assoc-lemma a b c) ⟩
+          suc (a + (b + c)) ≡⟨ refl ⟩
+          (suc a) + (b + c) ∎
         int-idL-lemma : (a : ℕ) -> a + 0 ≡ a
         int-idL-lemma zero = refl
         int-idL-lemma (suc x) = cong suc (int-idL-lemma x)
