@@ -1,9 +1,8 @@
 module GroupBasics where
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
-open import Data.Integer
-open import Data.Nat renaming (_+_ to _ℕ+_ ; _*_ to _ℕ*_)
-open import Data.Nat.Properties
+open import Data.Integer hiding (suc)
+open import Data.Nat renaming (_+_ to _add_ ; _*_ to _ℕ*_)
 
 record Group : Set₁  where
   field
@@ -41,7 +40,7 @@ int-addition-group = record
 
       where
         -- I bet there's a standard library proof for this...
-        nat-idL-lemma : {q : ℕ} -> q ℕ+ 0 ≡ q
+        nat-idL-lemma : {q : ℕ} -> q add 0 ≡ q
         nat-idL-lemma {zero} = refl
         nat-idL-lemma {ℕ.suc q} = cong ℕ.suc (nat-idL-lemma {q})
     idL-lemma (-[1+ n ]) = refl
@@ -52,26 +51,34 @@ int-addition-group = record
     idR-lemma (-[1+ n ]) = refl -- negatives
 
     assoc-lemma : (a b c : ℤ) -> (a + b) + c ≡ a + (b + c)
-    assoc-lemma (+0) b c      = 
+    assoc-lemma +0 b c = begin
+      (0ℤ + b) + c ≡⟨ cong (λ u -> u + c) (idR-lemma b) ⟩
+      b + c        ≡⟨ sym (idR-lemma (b + c)) ⟩
+      0ℤ + (b + c) ∎    
+    assoc-lemma a +0 c = begin
+      (a + 0ℤ) + c ≡⟨ {!   !} ⟩
+      a + c        ≡⟨ {!   !} ⟩
+      a + (0ℤ + c) ∎  
+    assoc-lemma a b +0 =    begin
+      (a + b) + 0ℤ ≡⟨ idL-lemma (a + b) ⟩
+      a + b        ≡⟨ cong (λ u -> a + u) (sym (idL-lemma b)) ⟩
+      a + (b + 0ℤ) ∎  
+    assoc-lemma +[1+ a ] +[1+ b ] +[1+ c ] = 
       begin
-        (0ℤ + b) + c
-          ≡⟨ cong (λ u -> u + c) (idR-lemma b) ⟩
-        b + c
-          ≡⟨ sym (idR-lemma (b + c)) ⟩
-        0ℤ + (b + c)
-      ∎        
-    assoc-lemma (+[1+ a ]) b c = 
+      +[1+ (a add suc b) add suc c ] ≡⟨ {!   !} ⟩
+      +[1+ a add (suc b add suc c) ] ∎  
+    assoc-lemma +[1+ a ] +[1+ b ] -[1+ c ] = {!   !}
+    assoc-lemma +[1+ a ] -[1+ b ] +[1+ c ] = {!   !}
+    assoc-lemma +[1+ a ] -[1+ b ] -[1+ c ] = {!   !}
+    assoc-lemma -[1+ a ] +[1+ b ] +[1+ c ] = {!   !}
+    assoc-lemma -[1+ a ] +[1+ b ] -[1+ c ] = {!   !}
+    assoc-lemma -[1+ a ] -[1+ b ] +[1+ c ] = {!   !}
+    assoc-lemma -[1+ a ] -[1+ b ] -[1+ c ] = 
       begin
-        (+[1+ a ] + b) + c
-          ≡⟨ {!   !} ⟩
-        +[1+ a ] + (b + c)
-      ∎
-    assoc-lemma (-[1+ a ]) b c = 
-      begin
-        (-[1+ a ] + b) + c
-          ≡⟨ {!   !} ⟩
-        -[1+ a ] + (b + c)
-      ∎
+      -[1+ suc (suc (a add b add c)) ] ≡⟨ {!   !} ⟩
+      -[1+ suc (a add suc (b add c)) ] ∎  
+
+
 
 
 
