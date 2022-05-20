@@ -40,9 +40,6 @@ int-addition-group = record
     nat-id-lemma {zero} = refl
     nat-id-lemma {suc n} = cong ℕ.suc (nat-id-lemma {n})
 
- 
-
-
     idL-lemma : (a : ℤ) ->  a + 0ℤ ≡ a
     idL-lemma +0       = refl     -- zero
     idL-lemma +[1+ n ] = cong (λ u -> +[1+ u ]) nat-id-lemma
