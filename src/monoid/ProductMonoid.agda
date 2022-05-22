@@ -6,7 +6,7 @@ open ≡-Reasoning
 module ProductMonoid (𝓜 𝓝 : Monoid) where
 
   open Monoid 𝓜 renaming (ε to φ ; _⊕_ to _⊙_ ; idL to idL-𝓜 ; idR to idR-𝓜 ; assoc to assoc-𝓜)
-  open Monoid 𝓝 renaming (ε to ψ ; _⊕_ to _⊗_ ; idL to idL-𝓝 ; idR to idR-𝓝 ; assoc to assoc-𝓝 )
+  open Monoid 𝓝 renaming (ε to ψ ; _⊕_ to _⊗_ ; idL to idL-𝓝 ; idR to idR-𝓝 ; assoc to assoc-𝓝)
 
   -- Extract the underlying set
   -- This is just a convenient operator syntax for `type`

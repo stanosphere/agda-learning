@@ -9,11 +9,15 @@ open import Data.Bool
 
 -- structure preserving map, i.e. f(x) . f(y) === f(x . y)
 -- identity maps to identity f(e1) == e2
-record MonoidMorphism (m n : Monoid) : Set where
+record MonoidMorphism (𝓜 𝓝 : Monoid) : Set where
+  open Monoid 𝓜 renaming (ε to φ ; _⊕_ to _⊙_)
+  open Monoid 𝓝 renaming (ε to ψ ; _⊕_ to _⊗_)
+  ⟦_⟧ : Monoid -> Set
+  ⟦ 𝓞 ⟧ = Monoid.type 𝓞
   field
-    map : type m -> type n
-    idPreserve : map (ε m) ≡  ε n
-    combPreserve : {a b : type m} -> map(_⊕_ m a b) ≡ (_⊕_ n (map a) (map b))
+    map          : ⟦ 𝓜 ⟧ -> ⟦ 𝓝 ⟧
+    idPreserve   : map φ ≡ ψ
+    combPreserve : {a b : ⟦ 𝓜 ⟧} -> map(a ⊙ b) ≡ (map a) ⊗ (map b)
         
 identityMorphism : (m : Monoid) -> MonoidMorphism m m
 identityMorphism m = record 
@@ -30,20 +34,15 @@ open ≡-Reasoning
 combineMorphism : {m n o : Monoid} -> MonoidMorphism m n -> MonoidMorphism n o -> MonoidMorphism m o
 combineMorphism {m} {n} {o} f g = record 
   { map = λ x → map g (map f x) 
-  ; idPreserve = 
-    begin 
-      mapG (mapF εM) 
-        ≡⟨ cong mapG idPreserveF ⟩ 
-      mapG εN 
-        ≡⟨ idPreserveG ⟩ 
-      εO 
-    ∎ 
+  ; idPreserve = begin 
+      mapG (mapF εM) ≡⟨ cong mapG idPreserveF ⟩ 
+      mapG εN        ≡⟨ idPreserveG ⟩ 
+      εO             ∎ 
   ; combPreserve = 
     λ {a} {b} -> begin 
-      mapG (mapF (a ⊕m b)) ≡⟨ cong mapG combPreserveF ⟩ 
-      mapG (mapF a ⊕n mapF b) ≡⟨ combPreserveG ⟩ 
-      mapG (mapF a) ⊕o mapG (mapF b)
-    ∎ 
+      mapG (mapF (a ⊕m b))           ≡⟨ cong mapG combPreserveF ⟩ 
+      mapG (mapF a ⊕n mapF b)        ≡⟨ combPreserveG ⟩ 
+      mapG (mapF a) ⊕o mapG (mapF b) ∎ 
   }
     where 
       open Monoid m renaming (ε to εM ; _⊕_ to _⊕m_)
