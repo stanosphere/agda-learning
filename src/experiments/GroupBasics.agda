@@ -75,4 +75,3 @@ int-addition-group = record
       suc (n add zero) ⊖ suc n  ≡⟨ cong (λ u -> (suc u) ⊖ suc n) (nat-id-lemma {n})  ⟩
       suc n ⊖ suc n             ≡⟨ n⊖n≡0 (suc n) ⟩
       0ℤ                        ∎
-

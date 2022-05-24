@@ -59,16 +59,16 @@ add-two-numbers (suc x) =
     lemma-suc-shuffle zero q = refl
     lemma-suc-shuffle (suc p) q = cong suc (lemma-suc-shuffle p q)
     lemma-suc-shuffle-2 : (p q : ℕ) -> (suc p) + (suc q) ≡ suc (suc (p + q))
-    lemma-suc-shuffle-2 p q = 
-      begin 
-        (suc p) + (suc q)
-          ≡⟨ refl ⟩ 
-        suc (p + suc q)
-          ≡⟨ cong suc (lemma-suc-shuffle p q) ⟩ 
-        suc (suc (p + q)) 
-      ∎ 
+    lemma-suc-shuffle-2 p q = begin 
+      (suc p) + (suc q) ≡⟨ refl ⟩ 
+      suc (p + suc q)   ≡⟨ cong suc (lemma-suc-shuffle p q) ⟩ 
+      suc (suc (p + q)) ∎ 
     lemma-suc-2 : (p : ℕ) -> suc (suc (p + p)) ≡ (suc p) + (suc p)
     lemma-suc-2 p = sym (lemma-suc-shuffle-2 p p)
+
+product-of-consecutive-numbers-is-even :  ∀ {n} -> Even (n * suc n)
+product-of-consecutive-numbers-is-even {zero} = zEven
+product-of-consecutive-numbers-is-even {suc n} = sEven {!  !}
 
 -- multiplying an even number by any natural number always gives an even number
 even-mult : ∀ {n} -> Even n -> (m : ℕ) -> Even (n * m)
