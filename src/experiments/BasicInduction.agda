@@ -6,7 +6,7 @@ open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 
 sum : ℕ -> ℕ
-sum 0 = 0
+sum 0       = 0
 sum (suc a) = (suc a) + sum a
 
 summation-formula-proof : (n : ℕ) -> 2 * sum n ≡ n * (n + 1)
@@ -15,7 +15,7 @@ summation-formula-proof (suc a) = begin
   2 * (sum (suc a))           ≡⟨ refl ⟩ 
   2 * (suc a + sum a)         ≡⟨ *-distribˡ-+ 2 (suc a) (sum a) ⟩ 
   (2 * suc a) + (2 * sum a)   ≡⟨ cong (λ u -> 2 * suc a + u) (summation-formula-proof a) ⟩ 
-  -- just careful but "obvious" algebra after the induction step
+  -- just careful but "obvious" algebra after the induction step, is there a nice solver that can do this automatically?
   (2 * suc a) + (a * (a + 1)) ≡⟨ refl ⟩ 
   2 * (1 + a) + a * (a + 1)   ≡⟨ cong (λ u -> 2 * (1 + a) + a * u) (+-comm a 1) ⟩ 
   2 * (1 + a) + a * (1 + a)   ≡⟨ sym (*-distribʳ-+ (1 + a) 2 a ) ⟩ 
@@ -34,7 +34,3 @@ sum-squares = sum-powers 2
 
 sum-cubes : ℕ -> ℕ
 sum-cubes = sum-powers 3
-
-comm :  (n m : ℕ) -> n + m ≡ n + m
-comm zero    b = {!   !}
-comm (suc a) b = {!   !}
