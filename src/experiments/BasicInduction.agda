@@ -4,6 +4,8 @@ open import Data.Nat
 open import Data.Nat.Properties
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
+open import Data.Nat.Tactic.RingSolver
+open import Data.List as List using (List; _∷_; [])
 
 sum : ℕ -> ℕ
 sum 0       = 0
@@ -27,7 +29,12 @@ summation-formula-proof (suc a) = begin
 
 summation-formula-proof' : (n : ℕ) -> 2 * sum n ≡ n * (n + 1)
 summation-formula-proof' zero = refl
-summation-formula-proof' (suc a) = {!    !} -- use solver here
+summation-formula-proof' (suc a) =  begin 
+  2 * (sum (suc a))         ≡⟨ refl ⟩ 
+  2 * (suc a + sum a)       ≡⟨ *-distribˡ-+ 2 (suc a) (sum a) ⟩ 
+  (2 * suc a) + (2 * sum a) ≡⟨ cong (λ u -> 2 * suc a + u) (summation-formula-proof' a) ⟩ 
+  2 * (1 + a) + a * (a + 1) ≡⟨ solve (a ∷ []) ⟩ 
+  (suc a) * ((suc a) + 1)   ∎
 
 sum-powers : ℕ -> ℕ -> ℕ
 sum-powers exponent 0 = 0
