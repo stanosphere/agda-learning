@@ -19,11 +19,15 @@ summation-formula-proof (suc a) = begin
   (2 * suc a) + (a * (a + 1)) ≡⟨ refl ⟩ 
   2 * (1 + a) + a * (a + 1)   ≡⟨ cong (λ u -> 2 * (1 + a) + a * u) (+-comm a 1) ⟩ 
   2 * (1 + a) + a * (1 + a)   ≡⟨ sym (*-distribʳ-+ (1 + a) 2 a ) ⟩ 
-  (2 + a) * (1 + a)           ≡⟨ *-comm (2 + a) (1 + a)  ⟩ 
+  (2 + a) * (1 + a)           ≡⟨ *-comm (2 + a) (1 + a) ⟩ 
   (1 + a) * (2 + a)           ≡⟨ refl ⟩ 
   (1 + a) * (1 + 1 + a)       ≡⟨ cong (λ u -> (1 + a) * (1 + u)) (+-comm 1 a) ⟩ 
   (1 + a) * ((1 + a) + 1)     ≡⟨ refl ⟩ 
   (suc a) * ((suc a) + 1)     ∎
+
+summation-formula-proof' : (n : ℕ) -> 2 * sum n ≡ n * (n + 1)
+summation-formula-proof' zero = refl
+summation-formula-proof' (suc a) = {!    !} -- use solver here
 
 sum-powers : ℕ -> ℕ -> ℕ
 sum-powers exponent 0 = 0
