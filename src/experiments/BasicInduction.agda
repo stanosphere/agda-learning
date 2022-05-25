@@ -34,7 +34,3 @@ summation-formula-proof (suc a) = begin
   (1 + a) * (1 + 1 + a)             ≡⟨ cong (λ u -> (1 + a) * (1 + u)) (+-comm 1 a) ⟩ 
   (1 + a) * ((1 + a) + 1)           ≡⟨ refl ⟩ 
   (suc a) * ((suc a) + 1)           ∎
-    where
-      mult-id-lemma : (n : ℕ) -> n ≡ n * 1
-      mult-id-lemma zero = refl
-      mult-id-lemma (suc a) = cong suc (mult-id-lemma a)
