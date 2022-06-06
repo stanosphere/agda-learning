@@ -36,6 +36,9 @@ summation-formula-proof' (suc a) =  begin
   2 * (1 + a) + a * (a + 1) ≡⟨ solve (a ∷ []) ⟩ 
   (suc a) * ((suc a) + 1)   ∎
 
+square-formula : (n m : ℕ) -> (n + m) * (n + m) ≡ n * n + 2 * n * m + m * m
+square-formula a b = solve (a ∷ b ∷ []) 
+
 sum-powers : ℕ -> ℕ -> ℕ
 sum-powers exponent 0 = 0
 sum-powers exponent (suc a) = (suc a) ^ exponent + sum-powers exponent a
