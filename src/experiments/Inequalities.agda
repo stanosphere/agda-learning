@@ -16,7 +16,7 @@ ineq-lemma-2 : ∀ {n : ℕ} -> ∃ (λ m -> m > n)
 ineq-lemma-2 { n } = 1 + n , s≤s (≤-refl n)
 
 ineq-lemma-3 : ∀ {x y : ℕ} -> x > 0 -> y > 0 -> x * y > 0
-ineq-lemma-3 {a} {b} a>0 y>0 = {!   !}
+ineq-lemma-3 {suc a} {suc b} a>0 y>0 = s≤s z≤n
 
 -- transistivity
 ineq-lemma-4 : ∀ {x y z : ℕ} -> x > y -> y > z -> x > z
