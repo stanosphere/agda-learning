@@ -1,9 +1,16 @@
 module Inequalities where
 
 open import Data.Nat 
+open import Data.Product
+open import Relation.Binary.PropositionalEquality
 
-ineq-lemma-1 : ∀ { x y z : ℕ } -> x > y -> x + z > y + z
--- goal: a + zero > b + zero
-ineq-lemma-1 {a} {b} {zero}  a>b = {!   !}
--- goal: a + suc c > b + suc c
-ineq-lemma-1 {a} {b} {suc c} a>b = {!   !}
+≤-refl : ∀ n -> n ≤ n
+≤-refl zero    = z≤n
+≤-refl (suc n) = s≤s (≤-refl n)
+
+ineq-lemma-1 : ∀ { x y z : ℕ } -> x > y -> z + x > z + y 
+ineq-lemma-1 {a} {b} {zero}  a>b = a>b
+ineq-lemma-1 {a} {b} {suc c} a>b = s≤s (ineq-lemma-1 {a} {b} {c} a>b)
+
+ineq-lemma-2 : ∀ {n : ℕ} -> ∃ (λ m -> m > n)
+ineq-lemma-2 { n } = 1 + n , s≤s (≤-refl n)
