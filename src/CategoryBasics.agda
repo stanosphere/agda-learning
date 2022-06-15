@@ -25,7 +25,7 @@ record Category : Set₁ where
             -> (f : arrow a b) 
             -> (g : arrow b c) 
             -> (h : arrow c d) 
-            -> compose h (compose g f) ≡ compose (compose h g) f
+            -> compose (compose h g) f  ≡ compose h (compose g f)
 
   _∘_ : ∀ {a b c} -> (f : arrow b c) -> (g : arrow a b) -> arrow a c
   _∘_ = compose 
@@ -45,7 +45,7 @@ addition-monoid-category =  record
   ; compose = λ f g -> f + g
   ; id-law-left = λ a b f -> +-identityʳ f
   ; id-law-right = λ a b f -> refl
-  ; assoc-law = λ f g h → sym (+-assoc h g f) -- hmm maybe assoc should be defined other way around?
+  ; assoc-law = λ f g h -> +-assoc h g f
   }
 
 open import monoid.MonoidBasics
@@ -57,7 +57,7 @@ monoid-category M = record
   ; compose = _⊕_
   ; id-law-left = λ a b -> idL 
   ; id-law-right = λ a b -> idR
-  ; assoc-law = λ f g h → {!   !}
+  ; assoc-law = λ f g h → assoc h g f
   } 
     where open Monoid M -- open this specific monoid so we can use its functions
 
