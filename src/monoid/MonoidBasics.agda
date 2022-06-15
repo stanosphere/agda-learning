@@ -1,4 +1,4 @@
-module MonoidBasics where
+module monoid.MonoidBasics where
 
 open import Relation.Binary.PropositionalEquality
 open import Data.Nat hiding (_^_)
