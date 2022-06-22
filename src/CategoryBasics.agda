@@ -1,3 +1,5 @@
+{-# OPTIONS --type-in-type #-}
+
 module CategoryBasics where
 
 -- set of objects
@@ -11,7 +13,7 @@ open ≡-Reasoning
 open import Data.Empty
 
 -- in general categories can be over Set_n
-record Category : Set₁ where 
+record Category : Set where 
   field 
     object : Set
     arrow : object -> object -> Set -- this is an ordered relation between objects, it's more general than just functions between objects
@@ -111,6 +113,7 @@ empty-category = record
   ; assoc-law = λ {a} f g h → ⊥-elim a
   }
 
+-- this generally isn't a functor 
 opposite-category : (𝓒 : Category ) -> Category
 opposite-category 𝓒 = record
   { object       = object
@@ -124,4 +127,13 @@ opposite-category 𝓒 = record
     where
       open Category 𝓒
     
-
+SET : Category 
+SET = record
+  { object       = Set
+  ; arrow        = λ x y -> (x -> y)
+  ; id           = λ A -> (λ a -> a)
+  ; compose      = λ f g a -> f (g a)
+  ; id-law-left  = λ a b f -> refl
+  ; id-law-right = λ a b f -> refl
+  ; assoc-law    = λ f g h -> refl
+  }
