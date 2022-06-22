@@ -131,7 +131,7 @@ opposite-category 𝓒 = record
 SET : Category 
 SET = record
   { object       = Set
-  ; arrow        = λ x y -> (x -> y)
+  ; arrow        = λ X Y -> (X -> Y)
   ; id           = λ A -> (λ a -> a)
   ; compose      = λ f g a -> f (g a)
   ; id-law-left  = λ a b f -> refl
