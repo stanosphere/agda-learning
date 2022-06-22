@@ -8,6 +8,7 @@ module CategoryBasics where
 
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
+open import Data.Empty
 
 -- in general categories can be over Set_n
 record Category : Set₁ where 
@@ -61,29 +62,53 @@ monoid-category M = record
   } 
     where open Monoid M -- open this specific monoid so we can use its functions
 
-leq-category : Category
-leq-category = record
-  { object = ℕ
-  ; arrow = λ x y -> x ≤ y
-  ; id = id'
-  ; compose = λ f g -> ≤-trans g f
-  ; id-law-left = λ a b f → id-law-left' f -- id-law-left'
-  ; id-law-right = id-law-right'
-  ; assoc-law = {!   !} 
+-- leq-category : Category
+-- leq-category = record
+--   { object = ℕ
+--   ; arrow = λ x y -> x ≤ y
+--   ; id = id'
+--   ; compose = λ f g -> ≤-trans g f
+--   ; id-law-left = λ a b f → id-law-left' f -- id-law-left'
+--   ; id-law-right = id-law-right'
+--   ; assoc-law = {!   !} 
+--   }
+--     where
+--       id' :  ∀ x -> x ≤ x 
+--       id' zero = z≤n
+--       id' (suc x) = s≤s (id' x)
+
+--       id-law-left' : {a b : ℕ} -> (f : a ≤ b) -> ≤-trans (id' a) f ≡ f
+--       id-law-left' z≤n = refl
+--       id-law-left' (s≤s f) = cong s≤s (id-law-left' f)
+
+--       id-law-right' : (a b : ℕ) -> (f : a ≤ b) -> ≤-trans f (id' b) ≡ f
+--       id-law-right' = {!   !}
+
+--       assoc-law' : {a b c d : ℕ} -> (f : a ≤ b) ->  (g : b ≤ c) -> (h : c ≤ d) -> ≤-trans (≤-trans f g) h ≡ ≤-trans f (≤-trans g h)
+--       assoc-law' = {!   !}
+
+singleton-category : Category
+singleton-category = record
+  { object = ⊤
+  ; arrow = λ x y → ⊤
+  ; id = λ a → tt
+  ; compose = λ f g → tt
+  ; id-law-left = λ a b f → refl
+  ; id-law-right = λ a b f → refl
+  ; assoc-law = λ f g h → refl
   }
-    where
-      id' :  ∀ x -> x ≤ x 
-      id' zero = z≤n
-      id' (suc x) = s≤s (id' x)
 
-      id-law-left' : {a b : ℕ} -> (f : a ≤ b) -> ≤-trans (id' a) f ≡ f
-      id-law-left' z≤n = refl
-      id-law-left' (s≤s f) = cong s≤s (id-law-left' f)
-
-      id-law-right' : (a b : ℕ) -> (f : a ≤ b) -> ≤-trans f (id' b) ≡ f
-      id-law-right' = {!   !}
-
-      assoc-law' : {a b c d : ℕ} -> (f : a ≤ b) ->  (g : b ≤ c) -> (h : c ≤ d) -> ≤-trans (≤-trans f g) h ≡ ≤-trans f (≤-trans g h)
-      assoc-law' = {!   !}
-
+-- vacuous truth
+-- all predicates on an empty set are true
+empty-category : Category
+empty-category = record
+  { object = ⊥
+  ; arrow = λ ()
+  ; id = λ ()
+  ; compose = λ {a} f g → ⊥-elim a
+  ; id-law-left = λ a b f → ⊥-elim a
+  ; id-law-right = λ a b f → ⊥-elim a
+  ; assoc-law = λ {a} f g h → ⊥-elim a
+  }
+  
 
