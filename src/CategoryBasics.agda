@@ -110,5 +110,18 @@ empty-category = record
   ; id-law-right = λ a b f → ⊥-elim a
   ; assoc-law = λ {a} f g h → ⊥-elim a
   }
-  
+
+opposite-category : (𝓒 : Category ) -> Category
+opposite-category 𝓒 = record
+  { object       = object
+  ; arrow        = λ x y → arrow y x
+  ; id           = λ a → id a
+  ; compose      = λ f g → compose g f
+  ; id-law-left  = λ a b f → id-law-right b a f
+  ; id-law-right = λ a b f → id-law-left b a f
+  ; assoc-law    = λ f g h → sym (assoc-law h g f)
+  }
+    where
+      open Category 𝓒
+    
 

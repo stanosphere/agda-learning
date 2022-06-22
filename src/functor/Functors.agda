@@ -50,3 +50,4 @@ from-empty = record
   ; identity-preservation    = λ {a} -> ⊥-elim a
   ; composition-preservation = λ {a} -> λ f g → ⊥-elim a
   } 
+
