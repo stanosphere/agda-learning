@@ -126,7 +126,8 @@ opposite-category 𝓒 = record
   }
     where
       open Category 𝓒
-    
+
+-- category of agda types    
 SET : Category 
 SET = record
   { object       = Set
