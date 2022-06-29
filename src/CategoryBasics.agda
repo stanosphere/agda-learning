@@ -114,6 +114,7 @@ empty-category = record
   }
 
 -- this generally isn't a functor 
+-- (a -> b, b -> c, a -> c) ==> (b -> a, c -> b, c -> a)
 opposite-category : (𝓒 : Category ) -> Category
 opposite-category 𝓒 = record
   { object       = object

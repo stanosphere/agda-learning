@@ -6,6 +6,7 @@ open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 open import Data.Unit
 open import Data.Empty
+open import Data.Maybe
 
 record Functor (𝓒 𝓓 : Category) : Set where
   field
@@ -17,7 +18,9 @@ record Functor (𝓒 𝓓 : Category) : Set where
     identity-preservation : ∀ { a : object 𝓒 } -> arrow_map (id 𝓒 a) ≡ id 𝓓 (object_map a)
     -- for all objects in C, composing and then mapping is identical to mapping first and then composing
     composition-preservation :
-      ∀ { a b c : object 𝓒 } -> (f : arrow 𝓒 b c) (g : arrow 𝓒 a b) -> arrow_map (compose 𝓒 f g)  ≡ compose 𝓓 ( arrow_map f ) (arrow_map g)
+      ∀ { a b c : object 𝓒 } -> 
+      (f : arrow 𝓒 b c) (g : arrow 𝓒 a b) -> 
+      arrow_map (compose 𝓒 f g) ≡ compose 𝓓 ( arrow_map f ) (arrow_map g)
     
 -- comparison with scala Functor
 -- map : (A -> B) -> List[A] -> List[B]
@@ -50,4 +53,28 @@ from-empty = record
   ; identity-preservation    = λ {a} -> ⊥-elim a
   ; composition-preservation = λ {a} -> λ f g → ⊥-elim a
   } 
+
+variable
+  A B C : Set 
+
+postulate
+  -- pointwise equality => eqaulity
+  funex : {f g : A -> B} -> ((a : A) -> f a ≡ g a) -> f ≡ g
+
+MAYBE : Functor SET SET
+MAYBE = record
+  { object_map = Maybe
+  ; arrow_map = λ f x → map f x
+  ; identity-preservation = funex identity-preservation' 
+  ; composition-preservation = λ f g → funex (composition-preservation' f g)
+  }
+    where
+      identity-preservation' : (a : Maybe A) -> map (λ x → x) a ≡ a
+      identity-preservation' (just x) = refl
+      identity-preservation' nothing = refl
+
+      composition-preservation' : (f : B -> C)(g : A -> B)(a : Maybe A) -> map (λ x → f (g x)) a ≡ map f (map g a)
+      composition-preservation' f g (just x) = refl
+      composition-preservation' f g nothing = refl
+
 
