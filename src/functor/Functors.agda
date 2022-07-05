@@ -41,18 +41,18 @@ id-functor = record
 
 to-singleton : { 𝓒 : Category } -> Functor 𝓒 singleton-category
 to-singleton = record
-  { object_map               = λ X → tt
-  ; arrow_map                = λ f → tt
+  { object_map               = λ X -> tt
+  ; arrow_map                = λ f -> tt
   ; identity-preservation    = refl
-  ; composition-preservation = λ f g → refl
+  ; composition-preservation = λ f g -> refl
   }
 
 from-empty : { 𝓒 : Category } -> Functor empty-category 𝓒 
 from-empty = record
   { object_map               = λ ()
-  ; arrow_map                = λ {a} f → ⊥-elim a
+  ; arrow_map                = λ {a} f -> ⊥-elim a
   ; identity-preservation    = λ {a} -> ⊥-elim a
-  ; composition-preservation = λ {a} -> λ f g → ⊥-elim a
+  ; composition-preservation = λ {a} -> λ f g -> ⊥-elim a
   } 
 
 variable
@@ -65,13 +65,13 @@ postulate
 MAYBE : Functor SET SET
 MAYBE = record
   { object_map = Maybe
-  ; arrow_map = λ f x → map f x
+  ; arrow_map = λ f x -> map f x
   ; identity-preservation = funex identity-preservation' 
-  ; composition-preservation = λ f g → funex (composition-preservation' f g)
+  ; composition-preservation = λ f g -> funex (composition-preservation' f g)
   }
     where
       open import Data.Maybe
-      identity-preservation' : (a : Maybe A) -> map (λ x → x) a ≡ a
+      identity-preservation' : (a : Maybe A) -> map (λ x -> x) a ≡ a
       identity-preservation' (just x) = refl
       identity-preservation' nothing = refl
 
@@ -82,18 +82,29 @@ MAYBE = record
 LIST : Functor SET SET
 LIST = record
   { object_map = List
-  ; arrow_map = λ f x → map f x
+  ; arrow_map = λ f x -> map f x
   ; identity-preservation = funex identity-preservation'
-  ; composition-preservation = λ f g → funex (composition-preservation' f g)
+  ; composition-preservation = λ f g -> funex (composition-preservation' f g)
   }
     where 
       open import Data.List
-      identity-preservation' : (xs : List A) -> map (λ x → x) xs ≡ xs
+      identity-preservation' : (xs : List A) -> map (λ x -> x) xs ≡ xs
       identity-preservation' [] = refl
-      identity-preservation' (x ∷ xs) = cong (λ u → [ x ] ++ u) (identity-preservation' xs)
+      identity-preservation' (x ∷ xs) = cong (λ u -> [ x ] ++ u) (identity-preservation' xs)
 
       composition-preservation' : (f : B -> C)(g : A -> B)(a : List A) -> map (f ∘ g) a ≡ (map f ∘ map g) a
       composition-preservation' f g [] = refl
-      composition-preservation' f g (x ∷ xs) = cong (λ u → [ (f ∘ g) x ] ++ u) (composition-preservation' f g xs)
+      composition-preservation' f g (x ∷ xs) = cong (λ u -> [ (f ∘ g) x ] ++ u) (composition-preservation' f g xs)
+
+Reader : Set -> Set -> Set
+Reader E A = E -> A
+
+READER : (E : Set) -> Functor SET SET
+READER E = record
+  { object_map = Reader E
+  ; arrow_map = λ f g e -> f (g e)
+  ; identity-preservation = refl
+  ; composition-preservation = λ f g -> refl
+  }
 
 
