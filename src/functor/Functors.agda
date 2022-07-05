@@ -1,11 +1,12 @@
 module functor.Functors where
 
 open import CategoryBasics
-open Category
+open Category hiding (_∘_)
 open import Relation.Binary.PropositionalEquality hiding ([_])
 open ≡-Reasoning
 open import Data.Unit
 open import Data.Empty
+open import Function.Base hiding (id)
 
 
 record Functor (𝓒 𝓓 : Category) : Set where
@@ -74,7 +75,7 @@ MAYBE = record
       identity-preservation' (just x) = refl
       identity-preservation' nothing = refl
 
-      composition-preservation' : (f : B -> C)(g : A -> B)(a : Maybe A) -> map (λ x → f (g x)) a ≡ map f (map g a)
+      composition-preservation' : (f : B -> C)(g : A -> B)(a : Maybe A) -> map (f ∘ g) a ≡ (map f ∘ map g) a
       composition-preservation' f g (just x) = refl
       composition-preservation' f g nothing = refl
 
@@ -91,8 +92,8 @@ LIST = record
       identity-preservation' [] = refl
       identity-preservation' (x ∷ xs) = cong (λ u → [ x ] ++ u) (identity-preservation' xs)
 
-      composition-preservation' : (f : B -> C)(g : A -> B)(a : List A) -> map (λ x → f (g x)) a ≡ map f (map g a)
+      composition-preservation' : (f : B -> C)(g : A -> B)(a : List A) -> map (f ∘ g) a ≡ (map f ∘ map g) a
       composition-preservation' f g [] = refl
-      composition-preservation' f g (x ∷ xs) = cong (λ u → [ f (g x) ] ++ u) (composition-preservation' f g xs)
+      composition-preservation' f g (x ∷ xs) = cong (λ u → [ (f ∘ g) x ] ++ u) (composition-preservation' f g xs)
 
 
