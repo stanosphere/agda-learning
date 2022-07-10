@@ -26,9 +26,9 @@ Id {𝓒} {𝓓} F = record
   { η = λ a → id 𝓓 (object-map F a)
   ; commutative-law = λ {x} {y} {f} -> begin 
       compose 𝓓 (id 𝓓 (object-map F y)) (arrow-map F f) 
-        ≡⟨ id-law-right 𝓓 (object-map F x) (object-map F y) (arrow-map F f) ⟩
+        ≡⟨ id-law-right 𝓓 (arrow-map F f)⟩
       arrow-map F f
-        ≡⟨ sym (id-law-left 𝓓 (object-map F x) (object-map F y) (arrow-map F f)) ⟩ 
+        ≡⟨ sym (id-law-left 𝓓 (arrow-map F f)) ⟩ 
       compose 𝓓 (arrow-map F f) (id 𝓓 (object-map F x)) 
       ∎ 
   }

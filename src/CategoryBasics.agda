@@ -27,8 +27,8 @@ record Category : Set where
 
     -- laws
     -- using ≡ means we will need to postulate things! For example ≡ isn't defined if arrows are functions
-    id-law-left  : ∀ a b -> (f : arrow a b) -> compose f (id a) ≡ f
-    id-law-right : ∀ a b -> (f : arrow a b) -> compose (id b) f ≡ f
+    id-law-left  : ∀ {a b} -> (f : arrow a b) -> compose f (id a) ≡ f
+    id-law-right : ∀ {a b} -> (f : arrow a b) -> compose (id b) f ≡ f
     assoc-law : ∀ {a b c d} 
             -> (f : arrow a b) 
             -> (g : arrow b c) 
@@ -47,8 +47,8 @@ addition-monoid-category =  record
   ; arrow = λ x y -> ℕ
   ; id = λ a -> 0
   ; compose = λ f g -> f + g
-  ; id-law-left = λ a b f -> +-identityʳ f
-  ; id-law-right = λ a b f -> refl
+  ; id-law-left = λ f -> +-identityʳ f
+  ; id-law-right = λ f -> refl
   ; assoc-law = λ f g h -> +-assoc h g f
   }
 
@@ -58,8 +58,8 @@ monoid-category M = record
   ; arrow = λ x y -> type
   ; id = λ a -> ε
   ; compose = _⊕_
-  ; id-law-left = λ a b -> idL 
-  ; id-law-right = λ a b -> idR
+  ; id-law-left = idL 
+  ; id-law-right = idR
   ; assoc-law = λ f g h → assoc h g f
   } 
     where open Monoid M -- open this specific monoid so we can use its functions
@@ -95,8 +95,8 @@ singleton-category = record
   ; arrow = λ x y → ⊤
   ; id = λ a → tt
   ; compose = λ f g → tt
-  ; id-law-left = λ a b f → refl
-  ; id-law-right = λ a b f → refl
+  ; id-law-left = λ f → refl
+  ; id-law-right = λ f → refl
   ; assoc-law = λ f g h → refl
   }
 
@@ -108,8 +108,8 @@ empty-category = record
   ; arrow = λ ()
   ; id = λ ()
   ; compose = λ {a} f g → ⊥-elim a
-  ; id-law-left = λ a b f → ⊥-elim a
-  ; id-law-right = λ a b f → ⊥-elim a
+  ; id-law-left = λ {a} f → ⊥-elim a
+  ; id-law-right = λ {a} f → ⊥-elim a
   ; assoc-law = λ {a} f g h → ⊥-elim a
   }
 
@@ -121,8 +121,8 @@ opposite-category 𝓒 = record
   ; arrow        = λ x y → arrow y x
   ; id           = λ a → id a
   ; compose      = λ f g → compose g f
-  ; id-law-left  = λ a b f → id-law-right b a f
-  ; id-law-right = λ a b f → id-law-left b a f
+  ; id-law-left  = λ {a} {b} f → id-law-right {b} {a} f
+  ; id-law-right = λ {a} {b} f → id-law-left {b} {a} f
   ; assoc-law    = λ f g h → sym (assoc-law h g f)
   }
     where
@@ -135,8 +135,8 @@ SET = record
   ; arrow        = λ X Y -> (X -> Y)
   ; id           = λ A -> (λ a -> a)
   ; compose      = λ f g a -> f (g a)
-  ; id-law-left  = λ a b f -> refl
-  ; id-law-right = λ a b f -> refl
+  ; id-law-left  = λ f -> refl
+  ; id-law-right = λ f -> refl
   ; assoc-law    = λ f g h -> refl
   }
 
