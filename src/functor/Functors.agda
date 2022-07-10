@@ -21,7 +21,7 @@ record Functor (𝓒 𝓓 : Category) : Set where
     composition-preservation :
       ∀ { a b c : object 𝓒 } -> 
       (f : arrow 𝓒 b c) (g : arrow 𝓒 a b) -> 
-      arrow-map (compose 𝓒 f g) ≡ compose 𝓓 ( arrow-map f ) (arrow-map g)
+      arrow-map (compose 𝓒 f g) ≡ compose 𝓓 (arrow-map f) (arrow-map g)
     
 -- comparison with scala Functor
 -- map : (A -> B) -> List[A] -> List[B]
@@ -30,6 +30,38 @@ record Functor (𝓒 𝓓 : Category) : Set where
 
 -- map(f compose g) === (map f) compose (map g)
 -- map(x -> x) === identity
+
+functor-composition : { 𝓐 𝓑 𝓒 : Category } -> (𝓕 : Functor 𝓑 𝓒) -> (𝓖 : Functor 𝓐 𝓑) -> Functor 𝓐 𝓒
+functor-composition { A } { B } { C } F G = record
+  { object-map = object-map'
+  ; arrow-map =  arrow-map'
+  ; identity-preservation = identity-preservation'
+  ; composition-preservation = composition-preservation'
+  }
+    where 
+      open Functor F
+      open Functor G
+      object-map' = object-map F ∘ object-map G
+
+      arrow-map' : ∀ { a b : object A } -> ( f : arrow A a b ) -> arrow C (object-map' a) (object-map' b)
+      arrow-map' = arrow-map F ∘ arrow-map G
+
+      identity-preservation' : {a : object A} → arrow-map' (id A a) ≡ id C (object-map' a)
+      identity-preservation' { a } = begin
+        arrow-map' (id A a)                  ≡⟨ refl ⟩
+        (arrow-map F ∘ arrow-map G) (id A a) ≡⟨ cong (arrow-map F) (identity-preservation G) ⟩
+        arrow-map F (id B (object-map G a))  ≡⟨ identity-preservation F ⟩
+        id C (object-map F (object-map G a)) ≡⟨ refl ⟩
+        id C (object-map' a)                 ∎ 
+
+      composition-preservation' : {a b c : object A} (f : arrow A b c) (g : arrow A a b) → arrow-map' (compose A f g) ≡ compose C (arrow-map' f) (arrow-map' g)
+      composition-preservation' {a} {b} {c} f g = begin 
+        arrow-map' (compose A f g)                                            ≡⟨ refl ⟩
+        (arrow-map F ∘ arrow-map G) (compose A f g)                           ≡⟨ cong (arrow-map F) (composition-preservation G f g) ⟩
+        arrow-map F (compose B (arrow-map G f) (arrow-map G g))               ≡⟨ composition-preservation F (arrow-map G f) (arrow-map G g) ⟩
+        compose C (arrow-map F (arrow-map G f)) (arrow-map F (arrow-map G g)) ≡⟨ refl ⟩
+        compose C (arrow-map' f) (arrow-map' g)                               ∎ 
+         
 
 id-functor : { 𝓒 : Category } -> Functor 𝓒 𝓒
 id-functor = record
