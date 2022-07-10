@@ -1,5 +1,8 @@
 {-# OPTIONS --type-in-type #-}
 
+open import Relation.Binary.PropositionalEquality
+open ≡-Reasoning
+
 module CategoryBasics where
 
 -- set of objects
@@ -33,7 +36,7 @@ record Category : Set where
             -> (f : arrow a b) 
             -> (g : arrow b c) 
             -> (h : arrow c d) 
-            -> compose (compose h g) f  ≡ compose h (compose g f)
+            -> compose (compose h g) f ≡ compose h (compose g f)
 
   _∘_ : ∀ {a b c} -> (f : arrow b c) -> (g : arrow a b) -> arrow a c
   _∘_ = compose 
@@ -140,14 +143,43 @@ SET = record
   ; assoc-law    = λ f g h -> refl
   }
 
--- -- objects are monoids, arrows, are monoid morphisms
+-- objects are monoids, arrows, are monoid morphisms
 -- MONOID : Category
 -- MONOID = record
 --   { object       = Monoid
---   ; arrow        = MonoidMorphism
---   ; id           = identityMorphism
---   ; compose      =  combine-morphism
---   ; id-law-left  = {!   !}
+--   ; arrow        = MonoidMorphism 
+--   ; id           = identity-morphism
+--   ; compose      = combine-morphism
+--   ; id-law-left  = id-law-left'
 --   ; id-law-right = {!   !}
 --   ; assoc-law    = {!   !}
---   }
+--   } 
+--   where
+--     id-law-left' : {a b : Monoid} (f : MonoidMorphism a b) -> combine-morphism f (identity-morphism a) ≡ f
+--     id-law-left' {a} {b} f = begin 
+--       combine-morphism f (identity-morphism a) 
+--         ≡⟨ refl ⟩
+--       record 
+--         { map          =  mapF 
+--         ; idPreserve   = begin mapF ψ ≡⟨ idPreserveF ⟩ φ ∎ 
+--         ; combPreserve = λ {x} {y} -> begin 
+--           mapF (x ⊙ y) 
+--             ≡⟨ combPreserveF ⟩
+--           mapF x ⊗ mapF y
+--             ∎
+--         }
+--         ≡⟨ {!   !} ⟩
+--       record 
+--         { map          = mapF 
+--         ; idPreserve   = idPreserveF 
+--         ; combPreserve = combPreserveF 
+--         }
+--         ≡⟨ refl ⟩
+--       f
+--         ∎
+--       where 
+--         open Monoid a renaming (ε to ψ ; _⊕_ to _⊙_)
+--         open Monoid b renaming (ε to φ ; _⊕_ to _⊗_)
+--         open MonoidMorphism f renaming (map to mapF ; idPreserve to idPreserveF ; combPreserve to combPreserveF)
+--         open MonoidMorphism (identity-morphism a) renaming (map to mapG ; idPreserve to idPreserveG ; combPreserve to combPreserveG)
+

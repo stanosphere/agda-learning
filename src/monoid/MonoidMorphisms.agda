@@ -20,8 +20,8 @@ record MonoidMorphism (𝓜 𝓝 : Monoid) : Set where
     idPreserve   : map φ ≡ ψ
     combPreserve : {a b : ⟦ 𝓜 ⟧} -> map(a ⊙ b) ≡ (map a) ⊗ (map b)
         
-identityMorphism : (m : Monoid) -> MonoidMorphism m m
-identityMorphism m = record 
+identity-morphism : (m : Monoid) -> MonoidMorphism m m
+identity-morphism m = record 
   { map = λ x -> x
   ; idPreserve = refl 
   ; combPreserve = refl 
