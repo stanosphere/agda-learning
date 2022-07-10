@@ -11,6 +11,11 @@ module CategoryBasics where
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 open import Data.Empty
+open import Data.Unit
+open import Data.Nat
+open import Data.Nat.Properties
+open import monoid.MonoidBasics
+open import monoid.MonoidMorphisms
 
 -- in general categories can be over Set_n
 record Category : Set where 
@@ -33,10 +38,6 @@ record Category : Set where
   _∘_ : ∀ {a b c} -> (f : arrow b c) -> (g : arrow a b) -> arrow a c
   _∘_ = compose 
 
-open import Data.Unit
-open import Data.Nat
-open import Data.Nat.Properties
-
 -- single object
 -- arrows are natural numbers
 -- composition is addition
@@ -51,7 +52,6 @@ addition-monoid-category =  record
   ; assoc-law = λ f g h -> +-assoc h g f
   }
 
-open import monoid.MonoidBasics
 monoid-category : Monoid -> Category
 monoid-category M = record
   { object = ⊤
@@ -139,3 +139,15 @@ SET = record
   ; id-law-right = λ a b f -> refl
   ; assoc-law    = λ f g h -> refl
   }
+
+-- -- objects are monoids, arrows, are monoid morphisms
+-- MONOID : Category
+-- MONOID = record
+--   { object       = Monoid
+--   ; arrow        = MonoidMorphism
+--   ; id           = identityMorphism
+--   ; compose      =  combine-morphism
+--   ; id-law-left  = {!   !}
+--   ; id-law-right = {!   !}
+--   ; assoc-law    = {!   !}
+--   }

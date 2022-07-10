@@ -1,11 +1,12 @@
-module MonoidMorphisms where
+module monoid.MonoidMorphisms where
 
-open import MonoidBasics
+open import monoid.MonoidBasics
 open Monoid
 open import Relation.Binary.PropositionalEquality
 open import Agda.Builtin.Unit
 open import Data.Product hiding (map)
 open import Data.Bool
+open import Function.Base hiding (id)
 
 -- structure preserving map, i.e. f(x) . f(y) === f(x . y)
 -- identity maps to identity f(e1) == e2
@@ -31,18 +32,18 @@ open MonoidMorphism
 open ≡-Reasoning
 
 -- composing the mapping function for any pair of morphisms guarentees we produce another morphism
-combineMorphism : {m n o : Monoid} -> MonoidMorphism m n -> MonoidMorphism n o -> MonoidMorphism m o
-combineMorphism {m} {n} {o} f g = record 
-  { map = λ x → map g (map f x) 
+combine-morphism : {m n o : Monoid} -> MonoidMorphism n o -> MonoidMorphism m n ->  MonoidMorphism m o
+combine-morphism {m} {n} {o} f g = record 
+  { map = map f ∘ map g 
   ; idPreserve = begin 
-      mapG (mapF εM) ≡⟨ cong mapG idPreserveF ⟩ 
-      mapG εN        ≡⟨ idPreserveG ⟩ 
-      εO             ∎ 
+      (mapF ∘ mapG) εM ≡⟨ cong mapF idPreserveG ⟩ 
+      mapF εN          ≡⟨ idPreserveF ⟩ 
+      εO               ∎ 
   ; combPreserve = 
     λ {a} {b} -> begin 
-      mapG (mapF (a ⊕m b))           ≡⟨ cong mapG combPreserveF ⟩ 
-      mapG (mapF a ⊕n mapF b)        ≡⟨ combPreserveG ⟩ 
-      mapG (mapF a) ⊕o mapG (mapF b) ∎ 
+      (mapF ∘ mapG) (a ⊕m b)                  ≡⟨ cong mapF combPreserveG ⟩ 
+      mapF (mapG a ⊕n mapG b)                 ≡⟨ combPreserveF ⟩ 
+      (mapF ∘  mapG $ a) ⊕o (mapF ∘ mapG $ b) ∎ 
   }
     where 
       open Monoid m renaming (ε to εM ; _⊕_ to _⊕m_)
