@@ -21,8 +21,8 @@ open import monoid.MonoidBasics
 open import monoid.MonoidMorphisms
 
 -- in general categories can be over Set_n
-record Category : Set where 
-  field 
+record Category : Set where
+  field
     object : Set
     arrow : object -> object -> Set -- this is an ordered relation between objects, it's more general than just functions between objects
     id : ∀ a -> arrow a a -- for all objects, a, there is an arrow from a to a
@@ -32,14 +32,14 @@ record Category : Set where
     -- using ≡ means we will need to postulate things! For example ≡ isn't defined if arrows are functions
     id-law-left  : ∀ {a b} -> (f : arrow a b) -> compose f (id a) ≡ f
     id-law-right : ∀ {a b} -> (f : arrow a b) -> compose (id b) f ≡ f
-    assoc-law : ∀ {a b c d} 
-            -> (f : arrow a b) 
-            -> (g : arrow b c) 
-            -> (h : arrow c d) 
+    assoc-law : ∀ {a b c d}
+            -> (f : arrow a b)
+            -> (g : arrow b c)
+            -> (h : arrow c d)
             -> compose (compose h g) f ≡ compose h (compose g f)
 
   _∘_ : ∀ {a b c} -> (f : arrow b c) -> (g : arrow a b) -> arrow a c
-  _∘_ = compose 
+  _∘_ = compose
 
 -- single object
 -- arrows are natural numbers
@@ -61,10 +61,10 @@ monoid-category M = record
   ; arrow = λ x y -> type
   ; id = λ a -> ε
   ; compose = _⊕_
-  ; id-law-left = idL 
+  ; id-law-left = idL
   ; id-law-right = idR
   ; assoc-law = λ f g h → assoc h g f
-  } 
+  }
     where open Monoid M -- open this specific monoid so we can use its functions
 
 -- leq-category : Category
@@ -75,10 +75,10 @@ monoid-category M = record
 --   ; compose = λ f g -> ≤-trans g f
 --   ; id-law-left = λ a b f → id-law-left' f -- id-law-left'
 --   ; id-law-right = id-law-right'
---   ; assoc-law = {!   !} 
+--   ; assoc-law = {!   !}
 --   }
 --     where
---       id' :  ∀ x -> x ≤ x 
+--       id' :  ∀ x -> x ≤ x
 --       id' zero = z≤n
 --       id' (suc x) = s≤s (id' x)
 
@@ -116,7 +116,7 @@ empty-category = record
   ; assoc-law = λ {a} f g h → ⊥-elim a
   }
 
--- this generally isn't a functor 
+-- this generally isn't a functor
 -- (a -> b, b -> c, a -> c) ==> (b -> a, c -> b, c -> a)
 opposite-category : (𝓒 : Category ) -> Category
 opposite-category 𝓒 = record
@@ -131,8 +131,8 @@ opposite-category 𝓒 = record
     where
       open Category 𝓒
 
--- category of agda types    
-SET : Category 
+-- category of agda types
+SET : Category
 SET = record
   { object       = Set
   ; arrow        = λ X Y -> (X -> Y)
@@ -143,43 +143,30 @@ SET = record
   ; assoc-law    = λ f g h -> refl
   }
 
+-- _≐_ : {a b : Monoid}(f g : MonoidMorphism a b) → Set
+-- _≐_ {a} f g = ∀ {x : Monoid.type a} -> map f x ≡ map g x
+--   where open MonoidMorphism
+
+-- id-law-left : {a b : Monoid} (f : MonoidMorphism a b)
+--             -> combine-morphism f (identity-morphism a) ≐ f
+-- id-law-left f = refl
+
 -- objects are monoids, arrows, are monoid morphisms
 -- MONOID : Category
 -- MONOID = record
 --   { object       = Monoid
---   ; arrow        = MonoidMorphism 
+--   ; arrow        = MonoidMorphism
 --   ; id           = identity-morphism
 --   ; compose      = combine-morphism
 --   ; id-law-left  = id-law-left'
 --   ; id-law-right = {!   !}
 --   ; assoc-law    = {!   !}
---   } 
+--   }
 --   where
 --     id-law-left' : {a b : Monoid} (f : MonoidMorphism a b) -> combine-morphism f (identity-morphism a) ≡ f
---     id-law-left' {a} {b} f = begin 
---       combine-morphism f (identity-morphism a) 
---         ≡⟨ refl ⟩
---       record 
---         { map          =  mapF 
---         ; idPreserve   = begin mapF ψ ≡⟨ idPreserveF ⟩ φ ∎ 
---         ; combPreserve = λ {x} {y} -> begin 
---           mapF (x ⊙ y) 
---             ≡⟨ combPreserveF ⟩
---           mapF x ⊗ mapF y
---             ∎
---         }
---         ≡⟨ {!   !} ⟩
---       record 
---         { map          = mapF 
---         ; idPreserve   = idPreserveF 
---         ; combPreserve = combPreserveF 
---         }
---         ≡⟨ refl ⟩
---       f
---         ∎
---       where 
---         open Monoid a renaming (ε to ψ ; _⊕_ to _⊙_)
---         open Monoid b renaming (ε to φ ; _⊕_ to _⊗_)
---         open MonoidMorphism f renaming (map to mapF ; idPreserve to idPreserveF ; combPreserve to combPreserveF)
---         open MonoidMorphism (identity-morphism a) renaming (map to mapG ; idPreserve to idPreserveG ; combPreserve to combPreserveG)
-
+--     id-law-left' {a} {b} record { map = map ; idPreserve = idPreserve ; combPreserve = combPreserve } = {!   !}
+--       -- where
+--       --   open Monoid a renaming (ε to ψ ; _⊕_ to _⊙_)
+--       --   open Monoid b renaming (ε to φ ; _⊕_ to _⊗_)
+--       --   open MonoidMorphism f renaming (map to mapF ; idPreserve to idPreserveF ; combPreserve to combPreserveF)
+--       --   open MonoidMorphism (identity-morphism a) renaming (map to mapG ; idPreserve to idPreserveG ; combPreserve to combPreserveG)
