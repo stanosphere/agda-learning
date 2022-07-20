@@ -33,11 +33,6 @@ Id {𝓒} {𝓓} F = record
       ∎
   }
 
--- M o M -> M
--- η : (a : object 𝓒) -> arrow 𝓓 (object-map 𝓕 a) (object-map 𝓖 a)
--- commutative-law : {x y : object 𝓒} -> {f : arrow 𝓒 x y}
---                 -> compose 𝓓 (η y) (arrow-map 𝓕 f) ≡ compose 𝓓 (arrow-map 𝓖 f) (η x)
-
 _⨁_ : {𝓒 𝓓 : Category}{F G H : Functor 𝓒 𝓓}
   -> (I : NaturalTransformation G H)
   -> (J : NaturalTransformation F G)
@@ -51,7 +46,7 @@ _⨁_ {𝓒} {𝓓} {F} {G} {H} I J = record
           ≡⟨ cong (λ x → θ Y ∘ x) law-J ⟩
         θ Y ∘ (G[ f ] ∘ η X)
           ≡⟨ sym (assoc-lawD _ _ _) ⟩
-        (θ Y ∘ G[ f ]) ∘ η X
+        (θ Y ∘D G[ f ]) ∘ η X
           ≡⟨ cong (λ x -> x ∘ η X) law-I ⟩
         (H[ f ] ∘ θ X) ∘ η X
           ≡⟨ assoc-lawD _ _ _ ⟩
