@@ -60,8 +60,7 @@ functor-composition { A } { B } { C } F G = record
         (arrow-map F ∘ arrow-map G) (compose A f g)                           ≡⟨ cong (arrow-map F) (composition-preservation G f g) ⟩
         arrow-map F (compose B (arrow-map G f) (arrow-map G g))               ≡⟨ composition-preservation F (arrow-map G f) (arrow-map G g) ⟩
         compose C (arrow-map F (arrow-map G f)) (arrow-map F (arrow-map G g)) ≡⟨ refl ⟩
-        compose C (arrow-map' f) (arrow-map' g)                               ∎ 
-         
+        compose C (arrow-map' f) (arrow-map' g)                               ∎
 
 id-functor : { 𝓒 : Category } -> Functor 𝓒 𝓒
 id-functor = record

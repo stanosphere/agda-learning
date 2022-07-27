@@ -18,5 +18,6 @@ open import NaturalTransformation
 record LawlessMonad { 𝓒 : Category } : Set where
   field
     T : Functor 𝓒 𝓒
-    η : Set
-    μ : Set 
+    η : NaturalTransformation id-functor T
+    μ : NaturalTransformation (functor-composition T T) T
+       
