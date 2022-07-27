@@ -20,4 +20,18 @@ record LawlessMonad { 𝓒 : Category } : Set where
     T : Functor 𝓒 𝓒
     η : NaturalTransformation id-functor T
     μ : NaturalTransformation (functor-composition T T) T
+
+-- the monad laws are basically the same as the monoid laws
+-- first we have associativity
+-- μ ∘ Tμ === μ ∘ μT
+-- and then the two identity laws
+-- μ ∘ Tη === 1 (1 identity naturl transformation on T)
+-- μ ∘ ηT === 1 (1 identity naturl transformation on T)
+
+record Monad { 𝓒 : Category } : Set where
+  field
+    T : Functor 𝓒 𝓒
+    η : NaturalTransformation id-functor T
+    μ : NaturalTransformation (functor-composition T T) T
+    -- laws
        
