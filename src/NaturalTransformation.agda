@@ -46,7 +46,7 @@ _⨁_ {𝓒} {𝓓} {F} {G} {H} I J = record
           ≡⟨ cong (λ x → θ Y ∘ x) law-J ⟩
         θ Y ∘ (G[ f ] ∘ η X)
           ≡⟨ sym (assoc-lawD _ _ _) ⟩
-        (θ Y ∘D G[ f ]) ∘ η X
+        (θ Y ∘ G[ f ]) ∘ η X
           ≡⟨ cong (λ x -> x ∘ η X) law-I ⟩
         (H[ f ] ∘ θ X) ∘ η X
           ≡⟨ assoc-lawD _ _ _ ⟩
