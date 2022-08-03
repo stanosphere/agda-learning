@@ -3,9 +3,7 @@
 module monad.MonadBasics where
 
 open import CategoryBasics
--- open Category 
 open import functor.Functors renaming (functor-composition to _|+|_)
-open Functor 
 open import NaturalTransformation
 open import Relation.Binary.PropositionalEquality
 
@@ -16,7 +14,7 @@ open import Relation.Binary.PropositionalEquality
 -- There are also some laws!
 -- but for now I'll see if I can write down a lawless monad
 
-record LawlessMonad { 𝓒 : CategoryBasics.Category } : Set where
+record LawlessMonad { 𝓒 : Category } : Set where
   field
     T : Functor 𝓒 𝓒
     η : NaturalTransformation id-functor T -- return
@@ -29,7 +27,7 @@ record LawlessMonad { 𝓒 : CategoryBasics.Category } : Set where
 -- μ ∘ Tη === 1 (1 identity naturl transformation on T)
 -- μ ∘ ηT === 1 (1 identity naturl transformation on T)
 
-record Monad { 𝓒 : CategoryBasics.Category  } : Set where
+record Monad { 𝓒 : Category  } : Set where
   field
     T : Functor 𝓒 𝓒
     η : NaturalTransformation id-functor T
@@ -40,11 +38,13 @@ record Monad { 𝓒 : CategoryBasics.Category  } : Set where
   module join = NaturalTransformation.NaturalTransformation μ 
   module return = NaturalTransformation.NaturalTransformation η 
   open Category 𝓒
+  open Functor T renaming (object-map to T₀; arrow-map to T₁)
+
   field 
-    id-law-right : ∀ x -> join.η x ∘ return.η (object-map T x) ≡ id (object-map T x)
-    id-law-left : ∀ x -> join.η x ∘ arrow-map T (return.η x) ≡ id (object-map T x)
+    id-law-right : ∀ x -> join.η x ∘ return.η (T₀ x) ≡ id (T₀ x)
+    id-law-left : ∀ x -> join.η x ∘ T₁ (return.η x) ≡ id (T₀ x)
     -- each side of the assoc-law takes T |+| T |+| T -> T
     -- one side unests the outer T's first, the other unests the inner T's first
-    assoc-law : ∀ x -> (join.η x) ∘ (arrow-map T (join.η x)) ≡ (join.η x) ∘ (join.η (object-map T x))
+    assoc-law : ∀ x -> (join.η x) ∘ (T₁ (join.η x)) ≡ (join.η x) ∘ (join.η (T₀ x))
 
        
