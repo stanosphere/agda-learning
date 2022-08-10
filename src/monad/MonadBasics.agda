@@ -47,4 +47,36 @@ record Monad { 𝓒 : Category  } : Set where
     -- one side unests the outer T's first, the other unests the inner T's first
     assoc-law : ∀ x -> (join.η x) ∘ (T₁ (join.η x)) ≡ (join.η x) ∘ (join.η (T₀ x))
 
+MAYBE-Monad : Monad {SET}
+MAYBE-Monad = record
+  { T = MAYBE
+  ; η = maybe-pure
+  ; μ = maybe-flatten
+  ; id-law-right = λ A → refl
+  ; id-law-left = λ A → funex id-law-left'
+  ; assoc-law = λ A → funex assoc-law'
+  }
+  where
+    open import Data.Maybe
+    maybe-pure : NaturalTransformation id-functor MAYBE
+    maybe-pure = record { η = λ A a → just a ; commutative-law = refl }
+
+    flatten : {a : Set} -> Maybe (Maybe a) -> Maybe a
+    flatten (just x) = x
+    flatten nothing = nothing
+
+    flatten-law : {A B : Set} -> {f : A -> B} -> (a : Maybe (Maybe A)) -> flatten (map (map f) a) ≡ map f (flatten a)
+    flatten-law (just mma) = refl
+    flatten-law nothing = refl
+
+    maybe-flatten : NaturalTransformation (MAYBE |+| MAYBE) MAYBE
+    maybe-flatten = record { η = λ A a → flatten a ; commutative-law = funex flatten-law  }
+
+    id-law-left' : {A : Set} -> (a : Maybe A) -> flatten (map just a) ≡ a
+    id-law-left' (just x) = refl -- flatten (map just (just x)) ≡ just x
+    id-law-left' nothing = refl  -- flatten (map just nothing) ≡ nothing
+
+    assoc-law' : {A : Set} -> (a : Maybe (Maybe (Maybe A))) -> flatten (map flatten a) ≡ flatten (flatten a)
+    assoc-law' (just mmma) = refl -- flatten (map flatten (just mmma)) ≡ flatten (flatten (just mmma))
+    assoc-law' nothing = refl     -- flatten (map flatten nothing) ≡ flatten (flatten nothing)
        
