@@ -24,13 +24,11 @@ record Product {𝓒 : Category} (A B : Category.object 𝓒) : Set where
         law-π₂ : ∀ {Y} -> (f₁ : arrow Y A)(f₂ : arrow Y B) -> (π₂ ∘ < f₁ , f₂ >) ≡ f₂
         unique : ∀ {Y} -> (g : arrow Y A×B) -> < π₁ ∘ g , π₂ ∘ g > ≡ g
 
-open import Data.Nat
-open import Data.Bool
 open import Data.Product
 
-SET-product : Product {SET} ℕ Bool
-SET-product = record
-  { A×B = ℕ × Bool
+SET-product : (A B : Set) -> Product {SET} A B
+SET-product A B = record
+  { A×B = A × B
   ; π₁ = λ { (n , _) -> n }
   ; π₂ = λ { (_ , b) -> b }
   ; <_,_> = λ f₁ f₂ x → f₁ x , f₂ x
