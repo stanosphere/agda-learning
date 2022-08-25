@@ -67,31 +67,6 @@ monoid-category M = record
   }
     where open Monoid M -- open this specific monoid so we can use its functions
 
--- leq-category : Category
--- leq-category = record
---   { object = ℕ
---   ; arrow = λ x y -> x ≤ y
---   ; id = id'
---   ; compose = λ f g -> ≤-trans g f
---   ; id-law-left = λ a b f → id-law-left' f -- id-law-left'
---   ; id-law-right = id-law-right'
---   ; assoc-law = {!   !}
---   }
---     where
---       id' :  ∀ x -> x ≤ x
---       id' zero = z≤n
---       id' (suc x) = s≤s (id' x)
-
---       id-law-left' : {a b : ℕ} -> (f : a ≤ b) -> ≤-trans (id' a) f ≡ f
---       id-law-left' z≤n = refl
---       id-law-left' (s≤s f) = cong s≤s (id-law-left' f)
-
---       id-law-right' : (a b : ℕ) -> (f : a ≤ b) -> ≤-trans f (id' b) ≡ f
---       id-law-right' = {!   !}
-
---       assoc-law' : {a b c d : ℕ} -> (f : a ≤ b) ->  (g : b ≤ c) -> (h : c ≤ d) -> ≤-trans (≤-trans f g) h ≡ ≤-trans f (≤-trans g h)
---       assoc-law' = {!   !}
-
 singleton-category : Category
 singleton-category = record
   { object = ⊤
